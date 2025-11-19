@@ -29,7 +29,7 @@ jobs:
       - name: use OWNER
         run: |
           echo "The value of OWNER is: ${OWNER}"
-          cho "The value of OWNER_LC is：${OWNER_LC}"
+          echo "The value of OWNER_LC is：${OWNER_LC}"
 
       - name: downcase REPO
         run: |
