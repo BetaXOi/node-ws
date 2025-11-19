@@ -21,18 +21,6 @@ jobs:
       packages: write
 
     steps:
-      # - name: set lower case owner name
-      #   run: |
-      #     echo "OWNER=${OWNER}" >>${GITHUB_ENV}
-      #     echo "OWNER_LC=${OWNER,,}" >>${GITHUB_ENV}
-      #   env:
-      #     OWNER: '${{ github.repository_owner }}'
-
-      # - name: use OWNER
-      #   run: |
-      #     echo "The value of OWNER is: ${OWNER}"
-      #     echo "The value of OWNER_LC is：${OWNER_LC}"
-
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -49,7 +37,9 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Set lower case repo owner
-        run: echo ::set-env name=OWNER_LC::$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]')
+        run: echo "OWNER_LC=${OWNER,,}" >>${GITHUB_ENV}
+        env:
+          OWNER: '${{ github.repository_owner }}'
         
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
