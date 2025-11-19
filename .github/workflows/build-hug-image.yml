@@ -1,3 +1,4 @@
+
 name: Build huggingface Image
  
 on:
@@ -20,24 +21,18 @@ jobs:
       packages: write
 
     steps:
-      - name: set lower case owner name
-        run: |
-          echo "OWNER_LC=${OWNER,,}" >>${GITHUB_ENV}
-        env:
-          OWNER: '${{ github.repository_owner }}'
+      # - name: set lower case owner name
+      #   run: |
+      #     echo "OWNER=${OWNER}" >>${GITHUB_ENV}
+      #     echo "OWNER_LC=${OWNER,,}" >>${GITHUB_ENV}
+      #   env:
+      #     OWNER: '${{ github.repository_owner }}'
 
-      - name: use OWNER
-        run: |
-          echo "The value of OWNER is: ${OWNER}"
-          echo "The value of OWNER_LC is：${OWNER_LC}"
+      # - name: use OWNER
+      #   run: |
+      #     echo "The value of OWNER is: ${OWNER}"
+      #     echo "The value of OWNER_LC is：${OWNER_LC}"
 
-      - name: downcase REPO
-        run: |
-          echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
-      - name: use REPO
-        run: |
-          echo "The value of REPO is: ${REPO}"
-    
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -53,13 +48,16 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      - name: Set lower case repo owner
+        run: echo ::set-env name=OWNER_LC::$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]')
+        
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
           tags: |
-            ghcr.io/${OWNER_LC}/msws:latest
+            ghcr.io/${{ env.OWNER_LC }}/msws:latest
           labels: |
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
             org.opencontainers.image.description=http server
