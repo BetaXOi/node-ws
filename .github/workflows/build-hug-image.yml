@@ -25,6 +25,18 @@ jobs:
           echo "OWNER_LC=${OWNER,,}" >>${GITHUB_ENV}
         env:
           OWNER: '${{ github.repository_owner }}'
+
+      - name: use OWNER
+        run: |
+          echo "The value of OWNER is: ${OWNER}"
+          cho "The value of OWNER_LC is：${OWNER_LC}"
+
+      - name: downcase REPO
+        run: |
+          echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
+      - name: use REPO
+        run: |
+          echo "The value of REPO is: ${REPO}"
     
       - name: Checkout repository
         uses: actions/checkout@v4
